@@ -1,3 +1,43 @@
+<?php
+
+session_start();
+
+$servername = "localhost";
+$username = "root";
+$password = "";
+$db = "reunion_island";
+
+try {
+    $conn = new PDO("mysql:host=$servername;dbname=$db", $username, $password);
+    // set the PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    $sql = "insert into hiking (name, difficulty, distance, duration, height_difference) VALUES (?,?,?,?,?)";
+    $stmt= $conn->prepare($sql);
+
+     if (isset($_POST['button']))
+    {
+         $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
+         $difficulty = filter_var($_POST['difficulty'], FILTER_SANITIZE_STRING);
+         $distance = filter_var($_POST['distance'], FILTER_SANITIZE_NUMBER_INT);
+         $duration = filter_var($_POST['duration'], FILTER_SANITIZE_STRING);
+         $height_difference = filter_var($_POST['height_difference'], FILTER_SANITIZE_NUMBER_INT);
+
+         if ($stmt->execute([$name, $difficulty, $distance, $duration, $height_difference])) {
+             $_SESSION['flash'] = ['class' => 'success', 'message' => 'Randonnée correctement ajoutée'];
+         } else {
+             $_SESSION['flash'] = ['class' => 'error', 'message' => 'Une erreur est survenue'];
+         }
+         header('Location: read.php');
+    }
+}
+catch(PDOException $e)
+{
+    echo "Connection failed: " . $e->getMessage();
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,7 +46,7 @@
 	<link rel="stylesheet" href="css/basics.css" media="screen" title="no title" charset="utf-8">
 </head>
 <body>
-	<a href="/php-pdo/read.php">Liste des données</a>
+	<a href="/php-training/read.php">Liste des données</a>
 	<h1>Ajouter</h1>
 	<form action="" method="post">
 		<div>

@@ -3,3 +3,10 @@ label, select, input{
   display: inline-block;
   margin: 5px 0;
 }
+
+.flash-success {
+  background: rgba(0, 166, 0, 0.55);
+  color: white;
+  font-size: 1.3rem;
+  padding: 1rem;
+}
