@@ -47,27 +47,29 @@ function getRandos($conn)
       </div>
   <?php } session_unset() ?>
 
-    <h1>Liste des randonnées</h1>
-    <table>
-        <tr>
-            <th>Nom</th>
-            <th>Difficulté</th>
-            <th>Distance</th>
-            <th>Durée</th>
-            <th>Dénivelé</th>
-        </tr>
-       <?php foreach($randos as $rando) { ?>
-           <tr>
-               <td><a href="<?= 'update.php?id='.$rando['id'] ?>"><?= $rando['name'] ?></a></td>
-               <td><?= ucfirst($rando['difficulty']) ?></td>
-               <td><?= $rando['distance'] ?></td>
-               <td><?= $rando['duration'] ?></td>
-               <td><?= $rando['height_difference'] ?></td>
-           </tr>
-        <?php } ?>
-    </table>
+    <div class="container">
+        <h1>Liste des randonnées</h1>
+        <table class="readTable">
+            <tr>
+                <th>Nom</th>
+                <th>Difficulté</th>
+                <th>Distance</th>
+                <th>Durée</th>
+                <th>Dénivelé</th>
+            </tr>
+            <?php foreach($randos as $rando) { ?>
+                <tr>
+                    <td><a href="<?= 'update.php?id='.$rando['id'] ?>"><?= $rando['name'] ?></a></td>
+                    <td><?= ucfirst($rando['difficulty']) ?></td>
+                    <td><?= $rando['distance'] ?></td>
+                    <td><?= $rando['duration'] ?></td>
+                    <td><?= $rando['height_difference'] ?></td>
+                </tr>
+            <?php } ?>
+        </table>
 
-    <a href="create.php">Ajouter une randonnée</a>
+        <a href="create.php">Ajouter une randonnée</a>
+    </div>
 
   </body>
 </html>

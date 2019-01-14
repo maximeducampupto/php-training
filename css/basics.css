@@ -1,7 +1,10 @@
-label, select, input{
-  width: 150px;
-  display: inline-block;
-  margin: 5px 0;
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Raleway', sans-serif;
 }
 
 .flash-success {
@@ -9,4 +12,52 @@ label, select, input{
   color: white;
   font-size: 1.3rem;
   padding: 1rem;
+}
+
+body {
+  background: #d8d8d8;
+}
+
+.container {
+  width: 70%;
+  margin: 0 auto;
+  background: #fff;
+  padding: 2rem;
+  margin-top: 2rem;
+}
+
+.container h1 {
+  text-align: center;
+  color: darkturquoise;
+  margin-bottom: 2rem;
+}
+
+.container table th {
+  padding: 1rem;
+  color: #fff;
+  background: darkturquoise;
+}
+
+.container table td {
+  padding: .5rem;
+  text-align: center;
+}
+
+.container table td:nth-of-type(1) {
+  text-align: left;
+}
+
+
+
+.container a {
+  text-decoration: none;
+  color: darkturquoise;
+  cursor: pointer;
+}
+
+
+label, select, input{
+  width: 150px;
+  display: inline-block;
+  margin: 5px 0;
 }
