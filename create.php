@@ -1,50 +1,28 @@
 <?php
 
-session_start();
+include('includes/db_connection.php');
+include('includes/helpers.php');
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$db = "reunion_island";
+$sql = "insert into hiking (name, difficulty, distance, duration, height_difference) VALUES (?,?,?,?,?)";
+$stmt= $conn->prepare($sql);
 
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$db", $username, $password);
-    // set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $sql = "insert into hiking (name, difficulty, distance, duration, height_difference) VALUES (?,?,?,?,?)";
-    $stmt= $conn->prepare($sql);
-
-     if (isset($_POST['button']))
-    {
-         $name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
-         $difficulty = filter_var($_POST['difficulty'], FILTER_SANITIZE_STRING);
-         $distance = filter_var($_POST['distance'], FILTER_SANITIZE_NUMBER_INT);
-         $duration = filter_var($_POST['duration'], FILTER_SANITIZE_STRING);
-         $height_difference = filter_var($_POST['height_difference'], FILTER_SANITIZE_NUMBER_INT);
-
-         if ($stmt->execute([$name, $difficulty, $distance, $duration, $height_difference])) {
-             $_SESSION['flash'] = ['class' => 'success', 'message' => 'Randonnée correctement ajoutée'];
-         } else {
-             $_SESSION['flash'] = ['class' => 'error', 'message' => 'Une erreur est survenue'];
-         }
-         header('Location: read.php');
-    }
-}
-catch(PDOException $e)
+if (isset($_POST['button']))
 {
-    echo "Connection failed: " . $e->getMessage();
+    include('includes/formValidation.php');
+
+    if ($stmt->execute([$name, $difficulty, $distance, $duration, $height_difference])) {
+        $_SESSION['flash'] = ['class' => 'success', 'message' => 'Randonnée correctement ajoutée'];
+    } else {
+        $_SESSION['flash'] = ['class' => 'error', 'message' => 'Une erreur est survenue'];
+    }
+    header('Location: read.php');
 }
+
+
+requireWith('includes/layout/header.php', ['title' => 'Ajouter une randonnée'])
 
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Ajouter une randonnée</title>
-	<link rel="stylesheet" href="css/basics.css" media="screen" title="no title" charset="utf-8">
-</head>
 <body>
 	<a href="/php-training/read.php">Liste des données</a>
 	<h1>Ajouter</h1>

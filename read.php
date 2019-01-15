@@ -1,46 +1,26 @@
 <?php
 
-session_start();
+include('includes/db_connection.php');
+include('includes/helpers.php');
 
-$servername = "localhost";
-$username = "root";
-$password = "";
-$db = "reunion_island";
-
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$db", $username, $password);
-    // set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $randos = getRandos($conn);
-}
-catch(PDOException $e)
-{
-    echo "Connection failed: " . $e->getMessage();
-}
+$randos = getRandos($conn);
 
 function getRandos($conn)
 {
     $query = 'select * from hiking';
     if ($query = $conn->query($query)) {
         return $query->fetchAll(PDO::FETCH_ASSOC);
+    } else {
+        return null;
     }
 }
 
+requireWith('includes/layout/header.php', ['title' => 'Randonnées'])
+
+
 ?>
-
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <title>Randonnées</title>
-    <link rel="stylesheet" href="css/basics.css" media="screen" title="no title" charset="utf-8">
-  </head>
   <body>
-
   <?php
-
   if (isset($_SESSION['flash'])) { ?>
       <div class="<?= 'flash-'.$_SESSION['flash']['class'] ?>">
           <p><?= $_SESSION['flash']['message']?></p>
@@ -49,6 +29,9 @@ function getRandos($conn)
 
     <div class="container">
         <h1>Liste des randonnées</h1>
+
+        <a href="create.php" class="addButton">Ajouter une randonnée</a>
+
         <table class="readTable">
             <tr>
                 <th>Nom</th>
@@ -56,20 +39,21 @@ function getRandos($conn)
                 <th>Distance</th>
                 <th>Durée</th>
                 <th>Dénivelé</th>
+                <th></th>
             </tr>
-            <?php foreach($randos as $rando) { ?>
-                <tr>
-                    <td><a href="<?= 'update.php?id='.$rando['id'] ?>"><?= $rando['name'] ?></a></td>
-                    <td><?= ucfirst($rando['difficulty']) ?></td>
-                    <td><?= $rando['distance'] ?></td>
-                    <td><?= $rando['duration'] ?></td>
-                    <td><?= $rando['height_difference'] ?></td>
-                </tr>
+            <?php if (!empty($randos)) { ?>
+                <?php foreach($randos as $rando) { ?>
+                    <tr>
+                        <td><a href="<?= 'update.php?id='.$rando['id'] ?>"><?= $rando['name'] ?></a></td>
+                        <td><?= ucfirst($rando['difficulty']) ?></td>
+                        <td><?= $rando['distance'] ?></td>
+                        <td><?= $rando['duration'] ?></td>
+                        <td><?= $rando['height_difference'] ?></td>
+                        <td><a href="<?= 'delete.php?id='.$rando['id'] ?>" class="deleteButton">x</a></td>
+                    </tr>
+                <?php } ?>
             <?php } ?>
         </table>
-
-        <a href="create.php">Ajouter une randonnée</a>
     </div>
-
   </body>
 </html>

@@ -1,41 +1,50 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
-$db = "reunion_island";
 
-try {
-    $conn = new PDO("mysql:host=$servername;dbname=$db", $username, $password);
-    // set the PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+include('includes/db_connection.php');
+include('includes/helpers.php');
 
-    if (isset($_GET['id']))
-    {
-        $id = htmlspecialchars($_GET['id']);
-        $q = "select * from hiking where id = $id";
-        if ($query = $conn->query($q)) {
-            $rando = $query->fetch(PDO::FETCH_ASSOC);
-        }
+if (isset($_GET['id']))
+{
+    $id = htmlspecialchars($_GET['id']);
+    $q = "select * from hiking where id = $id";
+    if ($query = $conn->query($q)) {
+        $rando = $query->fetch(PDO::FETCH_ASSOC);
     }
 }
-catch(PDOException $e)
+
+$sql = "update
+        hiking
+        set
+        name=?,
+        difficulty=?,
+        distance=?,
+        duration=?,
+        height_difference=?
+        where id=?";
+$stmt= $conn->prepare($sql);
+
+if (!empty($_POST))
 {
-    echo "Connection failed: " . $e->getMessage();
+    include('includes/formValidation.php');
+
+    if ($stmt->execute([$name, $difficulty, $distance, $duration, $height_difference, $id]))
+    {
+        $_SESSION['flash'] = ['class' => 'success', 'message' => 'Randonnée correctement éditée'];
+    } else {
+        $_SESSION['flash'] = ['class' => 'error', 'message' => 'Une erreur est survenue'];
+    }
+    header('Location: read.php');
 }
+
+
+requireWith('includes/layout/header.php', ['title' => 'Editer une randonnée']);
 
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-	<meta charset="utf-8">
-	<title>Ajouter une randonnée</title>
-	<link rel="stylesheet" href="css/basics.css" media="screen" title="no title" charset="utf-8">
-</head>
 <body>
 	<a href="/php-training/read.php">Liste des données</a>
-	<h1>Ajouter</h1>
-	<form action="" method="post">
+	<h1 style="text-align: center; margin-bottom: 2rem;">Editer</h1>
+	<form action="" method="post" class="rando-form">
 		<div>
 			<label for="name">Name</label>
 			<input type="text" name="name" value="<?= $rando['name'] ?>">
@@ -64,7 +73,7 @@ catch(PDOException $e)
 			<label for="height_difference">Dénivelé</label>
 			<input type="text" name="height_difference" value="<?= $rando['height_difference'] ?>">
 		</div>
-		<button type="button" name="button">Envoyer</button>
+        <input type="submit" value="Editer" style="width: 10% !important;">
 	</form>
 </body>
 </html>

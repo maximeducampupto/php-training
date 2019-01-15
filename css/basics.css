@@ -7,15 +7,15 @@
   font-family: 'Raleway', sans-serif;
 }
 
+body {
+  background: #cacaca;
+}
+
 .flash-success {
   background: rgba(0, 166, 0, 0.55);
   color: white;
   font-size: 1.3rem;
   padding: 1rem;
-}
-
-body {
-  background: #d8d8d8;
 }
 
 .container {
@@ -32,6 +32,10 @@ body {
   margin-bottom: 2rem;
 }
 
+.container table {
+  margin-top: 2rem;
+}
+
 .container table th {
   padding: 1rem;
   color: #fff;
@@ -41,23 +45,46 @@ body {
 .container table td {
   padding: .5rem;
   text-align: center;
+  height: 100px;
+  border-bottom: 1px dotted darkturquoise;
 }
 
 .container table td:nth-of-type(1) {
   text-align: left;
 }
 
-
-
 .container a {
   text-decoration: none;
-  color: darkturquoise;
+  color: #00acaf;
   cursor: pointer;
+  font-weight: bold;
 }
 
+a[class="deleteButton"] {
+  background: red;
+  border-radius: 50%;
+  color: #fff;
+  padding: 5px 8px;
+}
+
+a[class="addButton"] {
+  background: darkturquoise;
+  color: #fff;
+  font-weight: bold;
+  padding: .6rem;
+  text-decoration: none;
+}
 
 label, select, input{
-  width: 150px;
+  width: 300px;
+  padding: .5rem;
   display: inline-block;
   margin: 5px 0;
+}
+
+form {
+  margin: 0 auto;
+  background: #fff;
+  padding: 2rem;
+  width: 70%;
 }
