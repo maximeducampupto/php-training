@@ -14,6 +14,6 @@ if (isset($_GET['id']))
     } else {
         $_SESSION['flash'] = ['class' => 'error', 'message' => 'Une erreur est survenue'];
     }
-    header('Location: read.php');
+    header('Location: index.php');
 
 }

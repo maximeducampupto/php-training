@@ -5,6 +5,7 @@ include('includes/helpers.php');
 
 $randos = getRandos($conn);
 
+
 function getRandos($conn)
 {
     $query = 'select * from hiking';
@@ -39,6 +40,7 @@ requireWith('includes/layout/header.php', ['title' => 'Randonnées'])
                 <th>Distance</th>
                 <th>Durée</th>
                 <th>Dénivelé</th>
+                <th>Disponible</th>
                 <th></th>
             </tr>
             <?php if (!empty($randos)) { ?>
@@ -49,6 +51,7 @@ requireWith('includes/layout/header.php', ['title' => 'Randonnées'])
                         <td><?= $rando['distance'] ?></td>
                         <td><?= $rando['duration'] ?></td>
                         <td><?= $rando['height_difference'] ?></td>
+                        <td><?= $rando['available'] == '1' ? 'Oui' : 'Non' ?></td>
                         <td><a href="<?= 'delete.php?id='.$rando['id'] ?>" class="deleteButton">x</a></td>
                     </tr>
                 <?php } ?>

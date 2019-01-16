@@ -11,3 +11,4 @@ $difficulty = isset($_POST['difficulty']) ? $difficulty = filter_var($_POST['dif
 $distance = isset($_POST['distance']) ? $distance = filter_var($_POST['distance'], FILTER_SANITIZE_NUMBER_INT) : null;
 $duration = validateDuration($_POST['duration']);
 $height_difference = isset($_POST['height_difference']) ? $height_difference = filter_var($_POST['height_difference'], FILTER_SANITIZE_NUMBER_INT) : null;
+$available = isset($_POST['available']) ? filter_var($_POST['available'], FILTER_SANITIZE_NUMBER_INT) : null;
