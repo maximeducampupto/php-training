@@ -2,6 +2,8 @@
 
 include('includes/db_connection.php');
 include('includes/helpers.php');
+include('includes/check_login.php');
+
 
 $sql = "insert into hiking (name, difficulty, distance, duration, height_difference, available) VALUES (?,?,?,?,?,?)";
 $stmt= $conn->prepare($sql);
@@ -24,7 +26,7 @@ requireWith('includes/layout/header.php', ['title' => 'Ajouter une randonnée'])
 ?>
 
 <body>
-	<a href="/php-training/read.php">Liste des données</a>
+	<a href="/php-training/index.php">Liste des données</a>
 	<h1>Ajouter</h1>
 	<form action="" method="post">
 		<div>

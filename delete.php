@@ -2,6 +2,8 @@
 /**** Supprimer une randonnée ****/
 
 include('includes/db_connection.php');
+include('includes/check_login.php');
+
 
 if (isset($_GET['id']))
 {

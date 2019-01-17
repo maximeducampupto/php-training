@@ -2,14 +2,42 @@
 
 include('includes/db_connection.php');
 include('includes/helpers.php');
+include('includes/check_login.php');
+include('autoloader.php');
+
+
+use Respect\Validation\Validator as v;
 
 if (isset($_GET['id']))
 {
-    $id = htmlspecialchars($_GET['id']);
-    $q = "select * from hiking where id = $id";
-    if ($query = $conn->query($q)) {
-        $rando = $query->fetch(PDO::FETCH_ASSOC);
+    $id = filter_var($_GET['id'], FILTER_SANITIZE_NUMBER_INT);
+
+    $idValidator = v::intVal()->noWhitespace();
+
+    if ($idValidator->validate($id)) {
+
+
+        $q = "select * from hiking where id = $id";
+
+
+        if ($query = $conn->query($q)) {
+
+            $rando = $query->fetch(PDO::FETCH_ASSOC);
+
+            if (empty($rando)) {
+                $_SESSION['flash'] = ['class' => 'error', 'message' => 'Désolé, cette page n\'existe pas.'];
+                header('Location: index.php');
+                die();
+            }
+        }
+    } else {
+        $_SESSION['flash'] = ['class' => 'error', 'message' => 'Désolé, cette page n\'existe pas.'];
+        header('Location: index.php');
+        die();
     }
+
+
+
 }
 
 $sql = "update
@@ -28,13 +56,7 @@ if (!empty($_POST))
 {
     include('includes/formValidation.php');
 
-    if ($stmt->execute([$name, $difficulty, $distance, $duration, $height_difference, $available, $id]))
-    {
-        $_SESSION['flash'] = ['class' => 'success', 'message' => 'Randonnée correctement éditée'];
-    } else {
-        $_SESSION['flash'] = ['class' => 'error', 'message' => 'Une erreur est survenue'];
-    }
-    header('Location: index.php');
+
 }
 
 
@@ -43,7 +65,7 @@ requireWith('includes/layout/header.php', ['title' => 'Editer une randonnée']);
 ?>
 
 <body>
-	<a href="/php-training/read.php">Liste des données</a>
+	<a href="/php-training/index.php">Liste des données</a>
 	<h1 style="text-align: center; margin-bottom: 2rem;">Editer</h1>
 	<form action="" method="post" class="rando-form">
 		<div>
